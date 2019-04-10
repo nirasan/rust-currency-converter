@@ -1,8 +1,12 @@
 [package]
-name = "rust-currency-converter"
+name = "rcc"
 version = "0.1.0"
 authors = ["nirasan <niranirao@gmail.com>"]
 edition = "2018"
 
 [dependencies]
 reqwest = "*"
+chrono = { version = "0.4", features = ["serde"] }
+serde = "1"
+serde_derive = "1"
+csv = "1"
