@@ -1,5 +1,6 @@
 use std::error::Error;
 use std::fs::File;
+use chrono::prelude::*;
 
 #[derive(Debug, Deserialize)]
 struct EuroReferenceRate {
@@ -89,7 +90,7 @@ struct EuroReferenceRate {
 }
 
 #[test]
-fn test() {
+fn test_run() {
     if let Err(err) = run() {
         println!("{}", err);
     }
@@ -106,6 +107,9 @@ Date,USD,JPY,BGN,CYP,CZK,DKK,EEK,GBP,HUF,LTL,LVL,MTL,PLN,ROL,RON,SEK,SIT,SKK,CHF
     for result in reader.deserialize() {
         let record: EuroReferenceRate = result?;
         println!("{:?}", record);
+
+        let date = NaiveDate::parse_from_str(&record.Date, "%Y-%m-%d");
+        println!("{:?}", date);
     }
     Ok(())
 }
