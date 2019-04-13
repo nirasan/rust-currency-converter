@@ -113,3 +113,18 @@ Date,USD,JPY,BGN,CYP,CZK,DKK,EEK,GBP,HUF,LTL,LVL,MTL,PLN,ROL,RON,SEK,SIT,SKK,CHF
     }
     Ok(())
 }
+
+#[test]
+fn test_embed() -> Result<(), Box<Error>> {
+    let bytes = include_bytes!("eurofxref-hist.csv");
+    // let bytes: &[u8] = bytes;
+    let mut reader = csv::Reader::from_reader(bytes as &[u8]);
+    for result in reader.deserialize() {
+        let record: EuroReferenceRate = result?;
+        println!("{:?}", record);
+
+        let date = NaiveDate::parse_from_str(&record.Date, "%Y-%m-%d");
+        println!("{:?}", date);
+    }
+    Ok(())
+}
