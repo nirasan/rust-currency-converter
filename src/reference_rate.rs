@@ -1,6 +1,7 @@
 use std::error::Error;
 use std::fs::File;
 use chrono::prelude::*;
+use std::io::Read;
 
 #[derive(Debug, Deserialize)]
 struct EuroReferenceRate {
@@ -117,7 +118,6 @@ Date,USD,JPY,BGN,CYP,CZK,DKK,EEK,GBP,HUF,LTL,LVL,MTL,PLN,ROL,RON,SEK,SIT,SKK,CHF
 #[test]
 fn test_embed() -> Result<(), Box<Error>> {
     let bytes = include_bytes!("eurofxref-hist.csv");
-    // let bytes: &[u8] = bytes;
     let mut reader = csv::Reader::from_reader(bytes as &[u8]);
     for result in reader.deserialize() {
         let record: EuroReferenceRate = result?;
@@ -127,4 +127,33 @@ fn test_embed() -> Result<(), Box<Error>> {
         println!("{:?}", date);
     }
     Ok(())
+}
+
+#[test]
+fn test_zip() {
+    use std::io::prelude::*;
+
+    let bytes = include_bytes!("eurofxref-hist.zip");
+    let bytes: &[u8] = bytes;
+    let mut cur = std::io::Cursor::new(bytes);
+    let mut archive = zip::ZipArchive::new(cur).unwrap();
+
+    let mut file = match archive.by_name("eurofxref-hist.csv")
+        {
+            Ok(file) => file,
+            Err(..) => { println!("File test/lorem_ipsum.txt not found"); return; }
+        };
+
+//    let mut contents = String::new();
+//    file.read_to_string(&mut contents).unwrap();
+//    println!("{}", contents);
+
+    let mut reader = csv::Reader::from_reader(file);
+    for result in reader.deserialize() {
+        let record: EuroReferenceRate = result.unwrap();
+        println!("{:?}", record);
+
+        let date = NaiveDate::parse_from_str(&record.Date, "%Y-%m-%d");
+        println!("{:?}", date);
+    }
 }
