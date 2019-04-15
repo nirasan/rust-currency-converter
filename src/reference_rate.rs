@@ -157,3 +157,30 @@ fn test_zip() {
         println!("{:?}", date);
     }
 }
+
+#[test]
+fn test_reqwest() {
+    let mut res = reqwest::get("https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.zip").unwrap();
+    let mut buf: Vec<u8> = vec![];
+    res.copy_to(&mut buf).unwrap();
+    println!("{:?}", buf);
+
+    let bytes: &[u8] = &buf;
+    let mut cur = std::io::Cursor::new(bytes);
+    let mut archive = zip::ZipArchive::new(cur).unwrap();
+
+    let mut file = match archive.by_name("eurofxref-hist.csv")
+        {
+            Ok(file) => file,
+            Err(..) => { println!("File test/lorem_ipsum.txt not found"); return; }
+        };
+    
+    let mut reader = csv::Reader::from_reader(file);
+    for result in reader.deserialize() {
+        let record: EuroReferenceRate = result.unwrap();
+        println!("{:?}", record);
+
+        let date = NaiveDate::parse_from_str(&record.Date, "%Y-%m-%d");
+        println!("{:?}", date);
+    }
+}

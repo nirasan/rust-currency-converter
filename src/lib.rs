@@ -6,5 +6,6 @@ extern crate serde;
 extern crate serde_derive;
 
 extern crate zip;
+extern crate reqwest;
 
 pub mod reference_rate;
