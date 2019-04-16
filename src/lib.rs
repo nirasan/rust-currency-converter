@@ -9,3 +9,4 @@ extern crate zip;
 extern crate reqwest;
 
 pub mod reference_rate;
+pub mod cache;
