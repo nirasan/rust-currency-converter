@@ -136,9 +136,13 @@ pub fn cache_clear_all() {
             if let Ok(entry) = entry {
                 let path = entry.path();
                 if path.is_dir() {
-                    fs::remove_dir_all(path).expect("Failed to remove a dir");
+                    if let Err(e) = fs::remove_dir_all(path) {
+                        eprintln!("failed to remove dir. {:?}", e)
+                    }
                 } else {
-                    fs::remove_file(path).expect("Failed to remove a file");
+                    if let Err(e) = fs::remove_file(path) {
+                        eprintln!("failed to remove file. {:?}", e)
+                    }
                 }
             }
         }
@@ -147,14 +151,11 @@ pub fn cache_clear_all() {
 
 #[test]
 fn test_cache_clear_all() {
-    cache_set("a", "1");
-    cache_set("b", "2");
-    cache_set("c", "3");
-    assert_eq!(cache_exists("a"), true);
-    assert_eq!(cache_exists("b"), true);
-    assert_eq!(cache_exists("c"), true);
+    cache_set("one", "1");
+    cache_set("two", "2");
+    assert_eq!(cache_exists("one"), true);
+    assert_eq!(cache_exists("two"), true);
     cache_clear_all();
-    assert_eq!(cache_exists("a"), false);
-    assert_eq!(cache_exists("b"), false);
-    assert_eq!(cache_exists("c"), false);
+    assert_eq!(cache_exists("one"), false);
+    assert_eq!(cache_exists("two"), false);
 }
