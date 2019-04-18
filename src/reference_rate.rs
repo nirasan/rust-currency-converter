@@ -3,91 +3,133 @@ use std::fs::File;
 use chrono::prelude::*;
 use std::io::Read;
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 struct EuroReferenceRate {
-    Date: String,
+    #[serde(rename = "Date")]
+    date: String,
     #[serde(deserialize_with = "csv::invalid_option")]
-    USD: Option<f64>,
+    #[serde(rename = "USD")]
+    usd: Option<f64>,
     #[serde(deserialize_with = "csv::invalid_option")]
-    JPY: Option<f64>,
+    #[serde(rename = "JPY")]
+    jpy: Option<f64>,
     #[serde(deserialize_with = "csv::invalid_option")]
-    BGN: Option<f64>,
+    #[serde(rename = "BGN")]
+    bgn: Option<f64>,
     #[serde(deserialize_with = "csv::invalid_option")]
-    CYP: Option<f64>,
+    #[serde(rename = "CYP")]
+    cyp: Option<f64>,
     #[serde(deserialize_with = "csv::invalid_option")]
-    CZK: Option<f64>,
+    #[serde(rename = "CZK")]
+    czk: Option<f64>,
     #[serde(deserialize_with = "csv::invalid_option")]
-    DKK: Option<f64>,
+    #[serde(rename = "DKK")]
+    dkk: Option<f64>,
     #[serde(deserialize_with = "csv::invalid_option")]
-    EEK: Option<f64>,
+    #[serde(rename = "EEK")]
+    eek: Option<f64>,
     #[serde(deserialize_with = "csv::invalid_option")]
-    GBP: Option<f64>,
+    #[serde(rename = "GBP")]
+    gbp: Option<f64>,
     #[serde(deserialize_with = "csv::invalid_option")]
-    HUF: Option<f64>,
+    #[serde(rename = "HUF")]
+    huf: Option<f64>,
     #[serde(deserialize_with = "csv::invalid_option")]
-    LTL: Option<f64>,
+    #[serde(rename = "LTL")]
+    ltl: Option<f64>,
     #[serde(deserialize_with = "csv::invalid_option")]
-    LVL: Option<f64>,
+    #[serde(rename = "LVL")]
+    lvl: Option<f64>,
     #[serde(deserialize_with = "csv::invalid_option")]
-    MTL: Option<f64>,
+    #[serde(rename = "MTL")]
+    mtl: Option<f64>,
     #[serde(deserialize_with = "csv::invalid_option")]
-    PLN: Option<f64>,
+    #[serde(rename = "PLN")]
+    pln: Option<f64>,
     #[serde(deserialize_with = "csv::invalid_option")]
-    ROL: Option<f64>,
+    #[serde(rename = "ROL")]
+    rol: Option<f64>,
     #[serde(deserialize_with = "csv::invalid_option")]
-    RON: Option<f64>,
+    #[serde(rename = "RON")]
+    ron: Option<f64>,
     #[serde(deserialize_with = "csv::invalid_option")]
-    SEK: Option<f64>,
+    #[serde(rename = "SEK")]
+    sek: Option<f64>,
     #[serde(deserialize_with = "csv::invalid_option")]
-    SIT: Option<f64>,
+    #[serde(rename = "SIT")]
+    sit: Option<f64>,
     #[serde(deserialize_with = "csv::invalid_option")]
-    SKK: Option<f64>,
+    #[serde(rename = "SKK")]
+    skk: Option<f64>,
     #[serde(deserialize_with = "csv::invalid_option")]
-    CHF: Option<f64>,
+    #[serde(rename = "CHF")]
+    chf: Option<f64>,
     #[serde(deserialize_with = "csv::invalid_option")]
-    ISK: Option<f64>,
+    #[serde(rename = "ISK")]
+    isk: Option<f64>,
     #[serde(deserialize_with = "csv::invalid_option")]
-    NOK: Option<f64>,
+    #[serde(rename = "NOK")]
+    nok: Option<f64>,
     #[serde(deserialize_with = "csv::invalid_option")]
-    HRK: Option<f64>,
+    #[serde(rename = "HRK")]
+    hrk: Option<f64>,
     #[serde(deserialize_with = "csv::invalid_option")]
-    RUB: Option<f64>,
+    #[serde(rename = "RUB")]
+    rub: Option<f64>,
     #[serde(deserialize_with = "csv::invalid_option")]
-    TRL: Option<f64>,
+    #[serde(rename = "TRL")]
+    trl: Option<f64>,
     #[serde(deserialize_with = "csv::invalid_option")]
-    TRY: Option<f64>,
+    #[serde(rename = "TRY")]
+    try_: Option<f64>,
     #[serde(deserialize_with = "csv::invalid_option")]
-    AUD: Option<f64>,
+    #[serde(rename = "AUD")]
+    aud: Option<f64>,
     #[serde(deserialize_with = "csv::invalid_option")]
-    BRL: Option<f64>,
+    #[serde(rename = "BRL")]
+    brl: Option<f64>,
     #[serde(deserialize_with = "csv::invalid_option")]
-    CAD: Option<f64>,
+    #[serde(rename = "CAD")]
+    cad: Option<f64>,
     #[serde(deserialize_with = "csv::invalid_option")]
-    CNY: Option<f64>,
+    #[serde(rename = "CNY")]
+    cny: Option<f64>,
     #[serde(deserialize_with = "csv::invalid_option")]
-    HKD: Option<f64>,
+    #[serde(rename = "HKD")]
+    hkd: Option<f64>,
     #[serde(deserialize_with = "csv::invalid_option")]
-    IDR: Option<f64>,
+    #[serde(rename = "IDR")]
+    idr: Option<f64>,
     #[serde(deserialize_with = "csv::invalid_option")]
-    ILS: Option<f64>,
+    #[serde(rename = "ILS")]
+    ils: Option<f64>,
     #[serde(deserialize_with = "csv::invalid_option")]
-    INR: Option<f64>,
+    #[serde(rename = "INR")]
+    inr: Option<f64>,
     #[serde(deserialize_with = "csv::invalid_option")]
-    KRW: Option<f64>,
+    #[serde(rename = "KRW")]
+    krw: Option<f64>,
     #[serde(deserialize_with = "csv::invalid_option")]
-    MXN: Option<f64>,
+    #[serde(rename = "MXN")]
+    mxn: Option<f64>,
     #[serde(deserialize_with = "csv::invalid_option")]
-    MYR: Option<f64>,
+    #[serde(rename = "MYR")]
+    myr: Option<f64>,
     #[serde(deserialize_with = "csv::invalid_option")]
-    NZD: Option<f64>,
+    #[serde(rename = "NZD")]
+    nzd: Option<f64>,
     #[serde(deserialize_with = "csv::invalid_option")]
-    PHP: Option<f64>,
+    #[serde(rename = "PHP")]
+    php: Option<f64>,
     #[serde(deserialize_with = "csv::invalid_option")]
-    SGD: Option<f64>,
+    #[serde(rename = "SGD")]
+    sgd: Option<f64>,
     #[serde(deserialize_with = "csv::invalid_option")]
-    THB: Option<f64>,
+    #[serde(rename = "THB")]
+    thb: Option<f64>,
     #[serde(deserialize_with = "csv::invalid_option")]
-    ZAR: Option<f64>,
+    #[serde(rename = "ZAR")]
+    zar: Option<f64>,
 }
 
 #[test]
@@ -109,7 +151,7 @@ Date,USD,JPY,BGN,CYP,CZK,DKK,EEK,GBP,HUF,LTL,LVL,MTL,PLN,ROL,RON,SEK,SIT,SKK,CHF
         let record: EuroReferenceRate = result?;
         println!("{:?}", record);
 
-        let date = NaiveDate::parse_from_str(&record.Date, "%Y-%m-%d");
+        let date = NaiveDate::parse_from_str(&record.date, "%Y-%m-%d");
         println!("{:?}", date);
     }
     Ok(())
@@ -123,7 +165,7 @@ fn test_embed() -> Result<(), Box<Error>> {
         let record: EuroReferenceRate = result?;
         println!("{:?}", record);
 
-        let date = NaiveDate::parse_from_str(&record.Date, "%Y-%m-%d");
+        let date = NaiveDate::parse_from_str(&record.date, "%Y-%m-%d");
         println!("{:?}", date);
     }
     Ok(())
@@ -153,7 +195,7 @@ fn test_zip() {
         let record: EuroReferenceRate = result.unwrap();
         println!("{:?}", record);
 
-        let date = NaiveDate::parse_from_str(&record.Date, "%Y-%m-%d");
+        let date = NaiveDate::parse_from_str(&record.date, "%Y-%m-%d");
         println!("{:?}", date);
     }
 }
@@ -180,7 +222,7 @@ fn test_reqwest() {
         let record: EuroReferenceRate = result.unwrap();
         println!("{:?}", record);
 
-        let date = NaiveDate::parse_from_str(&record.Date, "%Y-%m-%d");
-        println!("{:?}", date);
+        let date = NaiveDate::parse_from_str(&record.date, "%Y-%m-%d");
+        println!("{:?}", date)
     }
 }
