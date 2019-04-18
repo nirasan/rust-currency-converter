@@ -86,21 +86,75 @@ pub fn cache_exists(key: &str) -> bool {
 
 #[test]
 fn test_cache_exists() {
-    cache_clear("", true);
+    cache_clear("ola");
     assert!(!cache_exists("ola"));
     let path = cache_set("ola", "world").unwrap();
     assert!(cache_exists("ola"));
 }
 
-pub fn cache_clear(key: &str, is_all: bool) {
+pub fn cache_clear_old(key: &str, is_all: bool) {
     let root = get_cache_root().expect("failed to get cache root");
     let target_path = if is_all {
-        Path::new(root.as_str()).to_path_buf()
+        Path::new(root.as_str()).join("*")
     } else {
         Path::new(root.as_str()).join(key)
     };
+    println!("target_path is {:?}", target_path);
+    if !target_path.exists() {
+        println!("not exists");
+        return;
+    }
+
     match fs::remove_dir_all(target_path.to_str().expect("path to_str() error")) {
         Ok(_) => {},
         Err(e) => panic!("remove_dir_all() error: {}", e),
     }
+}
+
+pub fn cache_clear(key: &str) {
+    let key = create_hash(key);
+    let root = get_cache_root().expect("failed to get cache root");
+    let target_path = Path::new(root.as_str()).join(key);
+    if target_path.exists() {
+        fs::remove_file(target_path).expect("failed to remove file");
+    }
+}
+
+#[test]
+fn test_cache_clear() {
+    cache_set("a", "b");
+    assert_eq!(cache_exists("a"), true);
+    cache_clear("a");
+    assert_eq!(cache_exists("a"), false);
+}
+
+pub fn cache_clear_all() {
+    let root = get_cache_root().expect("failed to get cache root");
+    let dir = fs::read_dir(root);
+    if let Ok(dir) = dir {
+        for entry in dir {
+            if let Ok(entry) = entry {
+                let path = entry.path();
+                if path.is_dir() {
+                    fs::remove_dir_all(path).expect("Failed to remove a dir");
+                } else {
+                    fs::remove_file(path).expect("Failed to remove a file");
+                }
+            }
+        }
+    }
+}
+
+#[test]
+fn test_cache_clear_all() {
+    cache_set("a", "1");
+    cache_set("b", "2");
+    cache_set("c", "3");
+    assert_eq!(cache_exists("a"), true);
+    assert_eq!(cache_exists("b"), true);
+    assert_eq!(cache_exists("c"), true);
+    cache_clear_all();
+    assert_eq!(cache_exists("a"), false);
+    assert_eq!(cache_exists("b"), false);
+    assert_eq!(cache_exists("c"), false);
 }
